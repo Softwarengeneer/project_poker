@@ -1,115 +1,99 @@
-# Poker Bot
+# Покер бот
 
-A poker assistant with a graphical interface in Python that calculates optimal actions based on mathematical equity and EV computations.
+Проект - покерный калькулятор с графическим интерфейсом на Python, который рассчитывает оптимальные действия в покере на основе математических вычислений equity и EV (ожидаемой стоимости).
 
-The project features a modular architecture separating poker logic, GUI, and computer vision.
+Проект включает модульную архитектуру с разделением логики покера, GUI и компьютерного зрения.
 
----
 
-##  Goals
+## Цель
 
-1. Create a poker calculator
-2. Provide real-time decision making
-3. Implement an intuitive graphical interface
-4. Use modular code structure
-5. Integrate computer vision to recognize cards automatically
+1. Создать покерный калькулятор
+2. Обеспечить real-time расчеты
+3. Реализовать удобный графический интерфейс
+4. Реализовать модульную архитектуру
+5. Реализовать компьютерное зрение для автоматического распознавания карт
 
----
 
-##  Tech Stack
+## Технический стек
 
 - `Python`
-- `tkinter` – GUI
-- `treys` – poker hand evaluation
-- `numpy` – math operations
-- `pickle` – caching
-- `YOLOv11n` – object detection
+- `tkinter` для GUI
+- `treys` для оценки покерных рук
+- `numpy` для математических вычислений
+- `pickle` для кэширования
+- `yolo11n` для детекции объектов
 
----
 
-## 🧮 Poker Math
+## Математика
 
-- Based on game theory and poker mathematics
-- Monte Carlo simulation for equity evaluation
-- `Equity`: chance to win a hand
-- `EV`: expected value of an action
-- `Pot odds`: ratio of pot to bet
-- `Fold equity`: chance the opponent folds
+- Система основана на теории игр и покерной математике
+- Для симуляций используется метод Монте-Карло
+- `Equity`: вероятность выигрыша в конкретной ситуации
+- `EV`: ожидаемая стоимость действия
+- `Pot odds`: соотношение банка к ставке
+- `Fold equity`: вероятность фолда оппонента
 
----
 
-## 🔍 YOLO Models
+## YOLO модели
 
-Using `YOLOv11n` (Nano):
-**2,583,517 parameters**, **100 layers**, **6.4 GFLOPs**.
+- Для всех задач использовалась YOLO11, `Nano` версия, с `2,583,517` параметрами, `100` слоями, и `6.4` GFLOPs.
 
-- **`totalpoker_yolo11n_200_768_40_0005.pt`**
-  General object detection on the poker table.
-  Trained on **200 images**, resolution **768**, **40 epochs**, `lr=0.005`.
-  Quality: `mAP50-95 = 0.822`, `F1 confidence = 0.43`.
+- `totalpoker_yolo11n_200_768_40_0005.pt` - Модель для общей детекции объектов на столе. Дообучена на `200` картинках, с рарешением `768`, в течении `40` эпох, с `lerning_rate=0.005`. Оценка качества `mAP50-95=0.822%`, `F1_Confidance=0.43` для все классов.
 
-- **`pokercard_yolo11n_7598_768_80_001.pt`**
-  Card detection model.
-  Trained on **7k images**, resolution **768**, **80 epochs**, `lr=0.01`.
-  Quality: `mAP50-95 = 0.866`, `F1 confidence = 0.55`.
+- `pokercard_yolo11n_7598_768_80_001.pt` - Модель для детекции карт на изображении. Дообучена на `7к` изображениях, с разрешением `768`, в течении `80` эпох, с `lerning_rate=0.01`. Оценка качества `mAP50-95=0.866%`, `F1_Confidance=0.55` для все классов.
 
----
-
-## 📁 Project Structure
+## Структура проекта
 
 ```
 Project_09_Poker/
 ├── src/
-│ ├── init.py
-│ ├── gui/
-│ │ └── gui.py                 # graphical interface
-│ ├── pokerlogic/
-│ │ ├── init.py
-│ │ ├── best_action.py         # EV & action calculation logic
-│ │ └── available_actions.py   # determine allowed actions
-│ ├── cv/
-│ │ ├── init.py
-│ │ ├── detect.py              # YOLO detector
-│ │ ├── ocr.py                 # text recognition
-│ │ └── parser.py              # JSON extraction
-│ └── config.py                # settings & constants
-├── models/                    # YOLO weights
-├── tests/                     # unit tests
-├── app.py                     # entry point
+│   ├── __init__.py
+│   ├── gui/
+│   │   └── gui.py                # графический интерфейс приложения
+│   ├── pokerlogic/
+│   │   ├── __init__.py
+│   │   ├── best_action.py        # основная логика расчета оптимального действия
+│   │   └── available_actions.py  # определение доступных действий
+│   ├── cv/
+│   │   ├── __init__.py
+│   │   ├── detect.py             # YOLO детектор
+│   │   ├── ocr.py                # распознавание текста
+│   │   └── parser.py             # парсинг результатов
+│   └── config.py                 # конфигурация
+├── models/                       # YOLO модели
+├── tests/                        # тесты
+├── app.py                        # точка входа
 ├── .gitignore
 ├── LICENSE
 ├── requirements.txt
 └── README.md
 ```
 
----
-
-##  Interface
+## Интерфейс
 
 ![interface](interface.jpg)
 
-###  How to Run
+### Запуск
+1. Для запуска используйте команду  `python app.py`
+2. Либо запустите исполняемый файл `poker_bot.exe`
+3. Выберите область экрана с покерным столом
+4. Нажмите "Анализ" для расчета оптимального действия
 
-1. Run `python app.py`
-2. Or launch the executable `poker_bot.exe`
-3. Select the poker table area
-4. Click "Analyze" to calculate optimal action
-
-###  System Requirements
-
+### Системные требования
 - Windows 10/11
 - 4GB RAM
-- 100MB free disk space
+- 100MB свободного места
+
+
 
 ---
 
-##  Disclaimer
 
-- This software is for **educational use only**
-- The author is **not responsible** for any misuse or consequences
+## Предупреждения
 
----
+- Программа предназначена только для образовательных целей
+- Автор не несет ответственности за последствия использования
 
-##  Author
+## Автор
 
 (C) 2025 Goncharov Ivan
