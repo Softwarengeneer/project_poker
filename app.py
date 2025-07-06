@@ -11,40 +11,59 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Настройка логирования
 def setup_logging():
     """Настройка системы логирования"""
-    # Создаем папку для логов если её нет
-    log_dir = "logs"
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
+    # Проверяем, запущен ли файл как исполняемый
+    is_executable = getattr(sys, 'frozen', False)
 
-    # Имя файла лога с текущей датой
-    log_filename = os.path.join(log_dir, f"poker_calculator_{datetime.now().strftime('%Y%m%d')}.log")
+    if is_executable:
+        # В исполняемом файле отключаем логирование в файл
+        logger = logging.getLogger()
+        logger.setLevel(logging.CRITICAL)  # Только критические ошибки
 
-    # Настройка форматирования
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
+        # Добавляем только консольный вывод для критических ошибок
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.CRITICAL)
+        formatter = logging.Formatter('%(levelname)s: %(message)s')
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
 
-    # Настройка корневого логгера
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+        return logger
+    
+    else:
+        # В обычном режиме полное логирование
+        # Создаем папку для логов если её нет
+        log_dir = "logs"
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
 
-    # Очищаем существующие обработчики
-    logger.handlers.clear()
+        # Имя файла лога с текущей датой
+        log_filename = os.path.join(log_dir, f"poker_calculator_{datetime.now().strftime('%Y%m%d')}.log")
 
-    # Обработчик для записи в файл
-    file_handler = logging.FileHandler(log_filename, encoding='utf-8')
-    file_handler.setLevel(logging.INFO)
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
+        # Настройка форматирования
+        formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
 
-    # Обработчик для вывода в консоль
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
+        # Настройка корневого логгера
+        logger = logging.getLogger()
+        logger.setLevel(logging.INFO)
 
-    return logger
+        # Очищаем существующие обработчики
+        logger.handlers.clear()
+
+        # Обработчик для записи в файл
+        file_handler = logging.FileHandler(log_filename, encoding='utf-8')
+        file_handler.setLevel(logging.INFO)
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+
+        # Обработчик для вывода в консоль
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.INFO)
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
+
+        return logger
 
 # Инициализируем логгер
 logger = setup_logging()

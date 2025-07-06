@@ -485,7 +485,7 @@ class PokerCalculatorGUI:
         '''Удаляет старые скриншоты, оставляя только указанное количество последних'''
         try:
             # Ищем все файлы скриншотов по паттерну
-            screenshot_pattern = "*.png"
+            screenshot_pattern = "screenshot_*.png"
             screenshot_files = glob.glob(screenshot_pattern)
 
             # Если max_screenshots = 0, удаляем все файлы
