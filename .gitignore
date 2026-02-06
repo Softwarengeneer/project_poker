@@ -56,6 +56,7 @@ var/
 # Можно добавлять исключения, если нужно отслеживать build-скрипты.
 *.manifest
 *.spec
+!poker_bot.spec
 
 # Installer logs
 pip-log.txt
