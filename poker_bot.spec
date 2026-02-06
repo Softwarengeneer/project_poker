@@ -5,9 +5,10 @@ from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 
 block_cipher = None
 
-# Collect ultralytics YAML configs and submodules automatically
+# Collect submodules and data files automatically
 ultralytics_datas = collect_data_files('ultralytics')
 ultralytics_hiddenimports = collect_submodules('ultralytics')
+pil_hiddenimports = collect_submodules('PIL')
 
 a = Analysis(
     ['app.py'],
@@ -17,15 +18,13 @@ a = Analysis(
         ('models/*.pt', 'models'),
         ('poker.ico', '.'),
     ] + ultralytics_datas,
-    hiddenimports=ultralytics_hiddenimports + [
+    hiddenimports=ultralytics_hiddenimports + pil_hiddenimports + [
         'torch',
         'torchvision',
         'cv2',
         'fuzzywuzzy',
         'Levenshtein',
         'treys',
-        'PIL',
-        'PIL._tkinter_finder',
         'pytesseract',
         'numpy',
         'tkinter',
