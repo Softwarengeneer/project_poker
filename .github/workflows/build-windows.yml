@@ -22,13 +22,13 @@ jobs:
       - name: Install Tesseract-OCR
         run: choco install tesseract -y
 
-      - name: Install CPU-only PyTorch
-        run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
           pip install pyinstaller
+
+      - name: Replace PyTorch with CPU-only version
+        run: pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu --force-reinstall --no-deps
 
       - name: Build with PyInstaller
         run: pyinstaller poker_bot.spec --noconfirm

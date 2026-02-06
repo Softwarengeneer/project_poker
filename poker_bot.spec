@@ -1,14 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
 # PyInstaller spec file for PokerBot Windows build
 
-import os
-import ultralytics
+from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 
 block_cipher = None
 
-# Ultralytics data files (YAML configs required at runtime)
-ultralytics_dir = os.path.dirname(ultralytics.__file__)
-ultralytics_cfg = os.path.join(ultralytics_dir, 'cfg')
+# Collect ultralytics YAML configs and submodules automatically
+ultralytics_datas = collect_data_files('ultralytics')
+ultralytics_hiddenimports = collect_submodules('ultralytics')
 
 a = Analysis(
     ['app.py'],
@@ -17,15 +16,8 @@ a = Analysis(
     datas=[
         ('models/*.pt', 'models'),
         ('poker.ico', '.'),
-        (ultralytics_cfg, 'ultralytics/cfg'),
-    ],
-    hiddenimports=[
-        'ultralytics',
-        'ultralytics.nn',
-        'ultralytics.nn.tasks',
-        'ultralytics.models',
-        'ultralytics.models.yolo',
-        'ultralytics.cfg',
+    ] + ultralytics_datas,
+    hiddenimports=ultralytics_hiddenimports + [
         'torch',
         'torchvision',
         'cv2',
